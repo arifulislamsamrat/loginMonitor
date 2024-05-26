@@ -23,14 +23,14 @@ app.post('/alert', (req, res) => {
 - targets:
   - 'logout-container:3000'
     `;
-    const targetsDir = path.resolve('/etc/prometheus/targets');
+    const targetsDir = path.resolve(__dirname, 'targets');
     if (!fs.existsSync(targetsDir)){
       fs.mkdirSync(targetsDir);
     }
     fs.writeFileSync(path.join(targetsDir, 'logout-container.yml'), targetConfig);
-    
+
     // Reload Prometheus configuration
-    exec('docker exec -it prometheus kill -HUP 1', (err, stdout, stderr) => {
+    exec('docker kill -s HUP prometheus', (err, stdout, stderr) => {
       if (err) {
         console.error(`Error reloading Prometheus: ${err}`);
         return;
