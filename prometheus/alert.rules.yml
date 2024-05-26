@@ -1,0 +1,11 @@
+groups:
+- name: example
+  rules:
+  - alert: HighRequestRate
+    expr: rate(login_requests_total[1m]) > 100
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High login request rate detected"
+      description: "The login request rate is {{ $value }}."

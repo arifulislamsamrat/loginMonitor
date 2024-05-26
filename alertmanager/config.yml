@@ -1,0 +1,13 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'webhook'
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1m
+
+receivers:
+- name: 'webhook'
+  webhook_configs:
+  - url: 'http://alert-handler:4000/scale'

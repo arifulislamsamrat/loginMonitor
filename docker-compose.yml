@@ -1,39 +1,40 @@
-version: '3.8'
-
+version: '3'
 services:
   server1:
-    build:
-      context: ./server1
+    build: ./server1
     ports:
       - "3001:3000"
-    networks:
-      - prometheus_network
-
+  
   server2:
-    build:
-      context: ./server2
+    build: ./server2
     ports:
       - "3002:3000"
-    networks:
-      - prometheus_network
-
+  
   server3:
-    build:
-      context: ./server3
+    build: ./server3
     ports:
       - "3003:3000"
-    networks:
-      - prometheus_network
-
+  
   prometheus:
     image: prom/prometheus
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
+      - ./prometheus/targets:/etc/prometheus/targets
     ports:
       - "9090:9090"
-    networks:
-      - prometheus_network
+  
+  alertmanager:
+    image: prom/alertmanager
+    volumes:
+      - ./alertmanager/config.yml:/etc/alertmanager/config.yml
+    ports:
+      - "9093:9093"
 
-networks:
-  prometheus_network:
-    driver: bridge
+  alert-handler:
+    build: ./alert-handler
+    ports:
+      - "4000:4000"
+
+  logout-service:
+    build: ./logout-service
