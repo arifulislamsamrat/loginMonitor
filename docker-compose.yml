@@ -33,6 +33,8 @@ services:
 
   alert-handler:
     build: ./alert-handler
+    volumes:
+      - ./alert-handler/targets:/alert-handler/targets
     ports:
       - "4000:4000"
 
